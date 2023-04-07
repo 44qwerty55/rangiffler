@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CountryService {
 
+  private final CountryJson countrie = new CountryJson(UUID.randomUUID(), "KZ", "Kazakhstan");
+
+/*
   private final List<CountryJson> countries = List.of(
       CountryJson.builder()
           .id(UUID.randomUUID())
@@ -64,7 +67,10 @@ public class CountryService {
     return countries;
   }
 
+ */
+
   public CountryJson getCountryByCode(String code) {
-    return countries.stream().filter(c -> c.getCode().equals(code)).findFirst().orElseThrow();
+    return countrie;
+  //  return countries.stream().filter(c -> c.getCode().equals(code)).findFirst().orElseThrow();
   }
 }
