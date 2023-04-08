@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class CountryJson {
 
@@ -21,4 +20,31 @@ public class CountryJson {
 
   @JsonProperty("name")
   private String name;
+
+  public CountryJson() {
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getName() {
+    return name;
+  }
 }

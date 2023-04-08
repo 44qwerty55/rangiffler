@@ -25,7 +25,7 @@ public class RangifflerUserdataService {
     UserJson updateCurrentUser(@Nonnull UserJson user) {
         UserEntity userEntity = userdataRepository.findByUsername(user.getUsername());
         userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastLame());
+        userEntity.setLastName(user.getLastName());
         userEntity.setFriendStatus(user.getFriendStatus());
         userEntity.setAvatar(user.getAvatar() != null ? user.getAvatar().getBytes(StandardCharsets.UTF_8) : null);
         UserEntity saved = userdataRepository.save(userEntity);

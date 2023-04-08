@@ -1,5 +1,6 @@
 package org.rangiffler.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rangiffler.data.UserEntity;
 
 import java.nio.charset.StandardCharsets;
@@ -7,11 +8,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserJson {
-
     private UUID id;
     private String username;
     private String firstName;
-    private String lastLame;
+    private String lastName;
     private String avatar;
     private FriendStatus friendStatus;
 
@@ -39,12 +39,12 @@ public class UserJson {
         this.firstName = firstName;
     }
 
-    public String getLastLame() {
-        return lastLame;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastLame(String lastLame) {
-        this.lastLame = lastLame;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getAvatar() {
@@ -69,7 +69,7 @@ public class UserJson {
         usr.setId(entity.getId());
         usr.setUsername(entity.getUsername());
         usr.setFirstName(entity.getFirstName());
-        usr.setLastLame(entity.getLastName());
+        usr.setLastName(entity.getLastName());
         usr.setFriendStatus(entity.getFriendStatus());
         usr.setAvatar(photo != null && photo.length > 0 ? new String(entity.getAvatar(), StandardCharsets.UTF_8) : null);
         return usr;
@@ -83,13 +83,13 @@ public class UserJson {
         return Objects.equals(id, that.id) &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastLame, that.lastLame) &&
+                Objects.equals(lastName, that.lastName) &&
                 Objects.equals(avatar, that.avatar) &&
                 friendStatus == that.friendStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, firstName, lastLame, avatar, friendStatus);
+        return Objects.hash(id, username, firstName, lastName, avatar, friendStatus);
     }
 }
