@@ -32,3 +32,5 @@ rangiffler-geo:
   base-uri: 'http://127.0.0.1:8091'
 rangiffler-userdata:
   base-uri: 'http://127.0.0.1:8092'
+rangiffler-photo:
+  base-uri: 'http://127.0.0.1:8093'

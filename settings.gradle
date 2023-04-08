@@ -3,4 +3,5 @@ include 'rangiffler-gateway'
 include 'rangiffler-auth'
 include 'rangiffler-geo'
 include 'rangifler-userdata'
+include 'rangiffler-photo'
 
