@@ -25,20 +25,5 @@ public class CountryController {
   public CountryJson getCountry(String code) {
     return geoClient.getCountryByCode(code);
   }
-/*
-  private final CountryService countryService;
-
-  @Autowired
-  public CountryController(CountryService countryService) {
-    this.countryService = countryService;
-  }
-
-  @GetMapping("/countries")
-  public List<CountryJson> getAllCountries() {
-    return countryService.getAllCountries();
-  }
-
-
- */
 
 }
