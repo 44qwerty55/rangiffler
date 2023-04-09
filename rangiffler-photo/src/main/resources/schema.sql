@@ -7,7 +7,7 @@ create extension if not exists "uuid-ossp";
   (
       id                      UUID unique        not null default uuid_generate_v1(),
       username                varchar(50)  not null,
-      photo                  bytea  not null,
+      photo                  bytea  ,
       description                varchar(255)  ,
       countries_id UUID         not null,
       name                varchar(255)  not null,

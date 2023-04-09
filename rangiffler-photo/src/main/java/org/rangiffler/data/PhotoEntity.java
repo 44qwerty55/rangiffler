@@ -18,10 +18,10 @@ public class PhotoEntity {
     @Column(nullable = false)
     private String username;
 
-    @Column(name = "photo", columnDefinition = "bytea")
+    @Column(name = "photo", columnDefinition = "bytea", nullable = true)
     private byte[] photo;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
     @Column(name = "countries_id")
