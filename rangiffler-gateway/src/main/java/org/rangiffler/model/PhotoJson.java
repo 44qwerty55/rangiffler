@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class PhotoJson {
 
   @JsonProperty("id")
@@ -23,4 +22,55 @@ public class PhotoJson {
 
   @JsonProperty("username")
   private String username;
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public CountryJson getCountryJson() {
+    return countryJson;
+  }
+
+  public void setCountryJson(CountryJson countryJson) {
+    this.countryJson = countryJson;
+  }
+
+  public String getPhoto() {
+    return photo;
+  }
+
+  public void setPhoto(String photo) {
+    this.photo = photo;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Override
+  public String toString() {
+    return "PhotoJson{" +
+            "id=" + id +
+            ", countryJson=" + countryJson +
+            ", photo='" + photo + '\'' +
+            ", description='" + description + '\'' +
+            ", username='" + username + '\'' +
+            '}';
+  }
 }

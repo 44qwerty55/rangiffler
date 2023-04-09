@@ -5,10 +5,8 @@ import org.rangiffler.service.RangifflerPhotoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,12 +29,14 @@ public class PhotoController {
     }
 
     @PostMapping("/addPhoto")
-    public PhotoJson addPhoto(@RequestParam PhotoJson photoJson) {
+    public PhotoJson addPhoto(@RequestBody PhotoJson photoJson) {
+       // LOG.atInfo().log(photoJson.toString());
         return rangifflerPhotoService.addPhoto(photoJson);
     }
 
-    @PostMapping("/dellPhoto")
-    public void dellPhoto(@RequestParam UUID photoUuid) {
-       rangifflerPhotoService.deletePhoto(photoUuid);
+    @DeleteMapping("/dellPhoto")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void dellPhoto(@RequestParam String photoUuid) {
+       rangifflerPhotoService.deletePhoto(UUID.fromString(photoUuid));
     }
 }
