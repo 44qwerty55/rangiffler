@@ -1,5 +1,6 @@
 package org.rangiffler.controller;
 
+import org.rangiffler.model.FriendsNameForFoto;
 import org.rangiffler.model.PhotoJson;
 import org.rangiffler.service.RangifflerPhotoService;
 import org.slf4j.Logger;
@@ -30,7 +31,6 @@ public class PhotoController {
 
     @PostMapping("/addPhoto")
     public PhotoJson addPhoto(@RequestBody PhotoJson photoJson) {
-       // LOG.atInfo().log(photoJson.toString());
         return rangifflerPhotoService.addPhoto(photoJson);
     }
 
@@ -38,5 +38,14 @@ public class PhotoController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void dellPhoto(@RequestParam String photoUuid) {
        rangifflerPhotoService.deletePhoto(UUID.fromString(photoUuid));
+    }
+    @PostMapping("/friends/photos")
+    public List<PhotoJson> getAllFriendsPhotos(@RequestBody FriendsNameForFoto friendsNameForFoto){
+        return rangifflerPhotoService.getAllFriendsPhotos(friendsNameForFoto);
+    }
+
+    @PostMapping("/editPhoto")
+    public PhotoJson editPhoto(@RequestBody PhotoJson photoJson) {
+        return rangifflerPhotoService.editPhoto(photoJson);
     }
 }
