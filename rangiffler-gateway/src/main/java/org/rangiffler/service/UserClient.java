@@ -1,7 +1,7 @@
 package org.rangiffler.service;
 
 import jakarta.annotation.Nonnull;
-import org.rangiffler.model.CountryJson;
+import org.rangiffler.model.FriendJson;
 import org.rangiffler.model.UserJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +40,10 @@ public class UserClient {
     }
 
     public @Nonnull
-    List<UserJson> getAllUsers() {
-        URI uri = UriComponentsBuilder.fromHttpUrl(rangifflerUserBaseUri + "/users").build().toUri();
+    List<UserJson> getAllUsers(@Nonnull String username) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("username", username);
+        URI uri = UriComponentsBuilder.fromHttpUrl(rangifflerUserBaseUri + "/users").queryParams(params).build().toUri();
         return webClient.get()
                 .uri(uri)
                 .retrieve()
@@ -58,6 +60,59 @@ public class UserClient {
 
         return webClient.get()
                 .uri(uri)
+                .retrieve()
+                .bodyToMono(UserJson.class)
+                .block();
+    }
+
+    public List<UserJson> getFriends(@Nonnull String username) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("username", username);
+        URI uri = UriComponentsBuilder.fromHttpUrl(rangifflerUserBaseUri + "/friends").queryParams(params).build().toUri();
+
+        return webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<UserJson>>() {
+                })
+                .block();
+    }
+
+    public List<UserJson> getInvitations(@Nonnull String username) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("username", username);
+        URI uri = UriComponentsBuilder.fromHttpUrl(rangifflerUserBaseUri + "/invitations").queryParams(params).build().toUri();
+
+        return webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<UserJson>>() {
+                })
+                .block();
+    }
+
+    public UserJson removeUserFromFriends(@Nonnull FriendJson friendJson) {
+        return webClient.post()
+                .uri(rangifflerUserBaseUri + "/friends/remove")
+                .body(Mono.just(friendJson), FriendJson.class)
+                .retrieve()
+                .bodyToMono(UserJson.class)
+                .block();
+    }
+
+    public UserJson acceptInvitation(@Nonnull FriendJson friendJson) {
+        return webClient.post()
+                .uri(rangifflerUserBaseUri + "/friends/submit")
+                .body(Mono.just(friendJson), FriendJson.class)
+                .retrieve()
+                .bodyToMono(UserJson.class)
+                .block();
+    }
+
+    public UserJson sendInvitation(@Nonnull FriendJson friendJson) {
+        return webClient.post()
+                .uri(rangifflerUserBaseUri + "/users/invite")
+                .body(Mono.just(friendJson), FriendJson.class)
                 .retrieve()
                 .bodyToMono(UserJson.class)
                 .block();

@@ -2,8 +2,10 @@ package org.rangiffler.data;
 
 
 import jakarta.persistence.*;
-import org.rangiffler.model.FriendStatus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,9 +29,20 @@ public class UserEntity {
     @Column(name = "avatar", columnDefinition = "bytea")
     private byte[] avatar;
 
-    @Column(name = "friend_Status", nullable = true)
-    @Enumerated(EnumType.STRING)
-    private FriendStatus friendStatus;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private List<UserEntity> friends = new ArrayList<>();
+
+    public List<UserEntity> getFriends() {
+        return friends;
+    }
+
+    public UserEntity addFriends(UserEntity... friends) {
+        this.friends.addAll(Arrays.asList(friends));
+        return this;
+    }
 
     public UUID getId() {
         return id;
@@ -49,10 +62,6 @@ public class UserEntity {
 
     public byte[] getAvatar() {
         return avatar;
-    }
-
-    public FriendStatus getFriendStatus() {
-        return friendStatus;
     }
 
     public void setId(UUID id) {
@@ -75,7 +84,4 @@ public class UserEntity {
         this.avatar = avatar;
     }
 
-    public void setFriendStatus(FriendStatus friendStatus) {
-        this.friendStatus = friendStatus;
-    }
 }
