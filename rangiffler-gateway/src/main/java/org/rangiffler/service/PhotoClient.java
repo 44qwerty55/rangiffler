@@ -1,7 +1,9 @@
 package org.rangiffler.service;
 
 import jakarta.annotation.Nonnull;
+import org.rangiffler.model.FriendsNameForFoto;
 import org.rangiffler.model.PhotoJson;
+import org.rangiffler.model.UserJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,13 +22,16 @@ import java.util.UUID;
 public class PhotoClient {
 
     private final WebClient webClient;
+    private final UserClient userClient;
     private final String rangifflerPhotoBaseUri;
 
     @Autowired
     public PhotoClient(WebClient webClient,
-                       @Value("${rangiffler-photo.base-uri}") String rangifflerPhotoBaseUri) {
+                       @Value("${rangiffler-photo.base-uri}") String rangifflerPhotoBaseUri,
+                       UserClient userClient) {
         this.webClient = webClient;
         this.rangifflerPhotoBaseUri = rangifflerPhotoBaseUri;
+        this.userClient = userClient;
     }
 
     public @Nonnull
@@ -51,12 +56,34 @@ public class PhotoClient {
     }
 
     public @Nonnull
+    PhotoJson editPhoto(@Nonnull PhotoJson photo) {
+        return webClient.post()
+                .uri(rangifflerPhotoBaseUri + "/editPhoto")
+                .body(Mono.just(photo), PhotoJson.class)
+                .retrieve()
+                .bodyToMono(PhotoJson.class)
+                .block();
+    }
+
+    public @Nonnull
     List<PhotoJson> getAllPhotosByUsername(@Nonnull String username) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("username", username);
         URI uri = UriComponentsBuilder.fromHttpUrl(rangifflerPhotoBaseUri + "/photos").queryParams(params).build().toUri();
         return webClient.get()
                 .uri(uri)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<PhotoJson>>() {
+                })
+                .block();
+    }
+
+    public List<PhotoJson> getAllFriendsPhotos(@Nonnull String username) {
+        List<UserJson> friends = userClient.getFriends(username);
+        FriendsNameForFoto friendsNameForFoto = FriendsNameForFoto.fromUserJson(friends);
+        return webClient.post()
+                .uri(rangifflerPhotoBaseUri + "/friends/photos")
+                .body(Mono.just(friendsNameForFoto), FriendsNameForFoto.class)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<PhotoJson>>() {
                 })

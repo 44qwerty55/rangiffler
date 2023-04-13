@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import org.rangiffler.model.PhotoJson;
 import org.rangiffler.service.PhotoClient;
-import org.rangiffler.service.PhotoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PhotoController {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhotoController.class);
-  private final PhotoService photoService;
   private final PhotoClient photoClient;
 
   @Autowired
-  public PhotoController(PhotoService photoService,PhotoClient photoClient) {
-    this.photoService = photoService;
+  public PhotoController(PhotoClient photoClient) {
     this.photoClient = photoClient;
   }
 
@@ -53,15 +50,14 @@ public class PhotoController {
   }
 
   @GetMapping("/friends/photos")
-  public List<PhotoJson> getAllFriendsPhotos() {
-    return photoService.getAllFriendsPhotos();
+  public List<PhotoJson> getAllFriendsPhotos(@AuthenticationPrincipal Jwt principal) {
+    String username = principal.getClaim("sub");
+    return photoClient.getAllFriendsPhotos(username);
   }
-
-
 
   @PatchMapping("/photos/{id}")
   public PhotoJson editPhoto(@RequestBody PhotoJson photoJson) {
-    return photoService.editPhoto(photoJson);
+    return photoClient.editPhoto(photoJson);
   }
 
 
