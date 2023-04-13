@@ -1,6 +1,5 @@
 package org.rangiffler.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rangiffler.data.UserEntity;
 
 import java.nio.charset.StandardCharsets;
@@ -70,7 +69,6 @@ public class UserJson {
         usr.setUsername(entity.getUsername());
         usr.setFirstName(entity.getFirstName());
         usr.setLastName(entity.getLastName());
-        usr.setFriendStatus(entity.getFriendStatus());
         usr.setAvatar(photo != null && photo.length > 0 ? new String(entity.getAvatar(), StandardCharsets.UTF_8) : null);
         return usr;
     }
