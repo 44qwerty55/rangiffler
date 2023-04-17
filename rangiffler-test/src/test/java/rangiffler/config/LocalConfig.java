@@ -19,12 +19,7 @@ public class LocalConfig implements Config {
     }
 
     @Override
-    public String currencyGrpcUrl() {
-        return "http://127.0.0.1:8092/";
-    }
-
-    @Override
-    public String spendUrl() {
+    public String photoUrl() {
         return "http://127.0.0.1:8093/";
     }
 

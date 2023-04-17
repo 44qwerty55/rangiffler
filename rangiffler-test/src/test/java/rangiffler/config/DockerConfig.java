@@ -13,13 +13,8 @@ public class DockerConfig implements Config {
     }
 
     @Override
-    public String currencyGrpcUrl() {
+    public String photoUrl() {
         return "niffler-currency";
-    }
-
-    @Override
-    public String spendUrl() {
-        return "niffler-spend";
     }
 
     @Override
