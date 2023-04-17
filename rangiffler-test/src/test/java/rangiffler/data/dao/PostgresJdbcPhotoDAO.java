@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static rangiffler.data.DataBase.USERDATA;
+import static rangiffler.data.DataBase.PHOTO;
 
 public class PostgresJdbcPhotoDAO implements PhotoDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostgresJdbcPhotoDAO.class);
-    private final DataSource ds = DataSourceContext.INSTANCE.getDatatSource(USERDATA);
+    private final DataSource ds = DataSourceContext.INSTANCE.getDatatSource(PHOTO);
 
 
     @Override
@@ -46,6 +46,32 @@ public class PostgresJdbcPhotoDAO implements PhotoDao {
             LOG.error("Error while database operation", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public PhotoEntity getPhoto(UUID photoUuid) {
+        PhotoEntity photoEntity = new PhotoEntity();
+        try (Connection con = ds.getConnection();
+             Statement st = con.createStatement()) {
+            String sql = String.format("SELECT * FROM photos WHERE id = '%s';", photoUuid);
+            ResultSet resultSet = st.executeQuery(sql);
+            if (resultSet.next()) {
+                photoEntity.setId(UUID.fromString(resultSet.getString("id")))
+                        .setUsername(resultSet.getString("username"))
+                        .setDescription(resultSet.getString("description"))
+                        .setCountriesId(UUID.fromString(resultSet.getString("countries_id")))
+                        .setPhoto(resultSet.getBytes("photo"))
+                        .setCode(resultSet.getString("code"))
+                        .setName(resultSet.getString("name"));
+                return photoEntity;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            LOG.error("Error while database operation", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
