@@ -4,11 +4,8 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import rangiffler.model.FriendsNameForFoto;
 import rangiffler.model.PhotoJson;
-import rangiffler.model.UserJson;
-
-import java.util.List;
-import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -31,7 +28,7 @@ public class RangifflerPhotoClient {
     }
 
 
-    public ValidatableResponse postFriendsPhoto(List<String> friends) {
+    public ValidatableResponse postFriendsPhoto(FriendsNameForFoto friends) {
         return given()
                 .spec(requestSpec())
                 .body(friends)
@@ -47,10 +44,10 @@ public class RangifflerPhotoClient {
                 .then();
     }
 
-    public ValidatableResponse deletePhoto(UUID photoUuid) {
+    public ValidatableResponse deletePhoto(String photoUuid) {
         return given()
                 .spec(requestSpec())
-                .queryParams("username", photoUuid)
+                .queryParams("photoUuid", photoUuid)
                 .delete("/dellPhoto")
                 .then();
     }

@@ -5,15 +5,11 @@ import rangiffler.data.dao.PostgresJdbcGeoDAO;
 import rangiffler.model.CountriesJson;
 import rangiffler.model.Country;
 import rangiffler.model.PhotoJson;
-import rangiffler.model.UserJson;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
-import java.util.TimeZone;
 
 
 public class PhotoGenerator {
@@ -45,9 +41,4 @@ public class PhotoGenerator {
         }
     }
 
-    public static String getUTCdatetime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(new Date());
-    }
 }
