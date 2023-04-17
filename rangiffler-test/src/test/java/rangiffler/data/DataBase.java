@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 public enum DataBase {
     USERDATA("jdbc:postgresql://127.0.0.1:5432/rangiffler-userdata"),
     AUTH("jdbc:postgresql://127.0.0.1:5432/rangiffler-auth"),
+    PHOTO("jdbc:postgresql://127.0.0.1:5432/rangiffler-photo"),
     GEO("jdbc:postgresql://127.0.0.1:5432/rangiffler-geo");
 
     private final String url;

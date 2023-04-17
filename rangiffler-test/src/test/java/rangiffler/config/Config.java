@@ -18,7 +18,6 @@ public interface Config {
 
     String userdataUrl();
 
-    String currencyGrpcUrl();
+    String photoUrl();
 
-    String spendUrl();
 }
