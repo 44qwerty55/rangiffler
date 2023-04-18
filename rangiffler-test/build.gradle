@@ -37,6 +37,7 @@ dependencies {
         exclude group: "org.junit.jupiter"
     }
     testImplementation 'io.qameta.allure:allure-jsonunit:2.21.0'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.21.0'
     implementation group: 'net.javacrumbs.json-unit', name: 'json-unit-core', version: '2.36.0'
     testImplementation 'com.codeborne:selenide:6.11.1'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'

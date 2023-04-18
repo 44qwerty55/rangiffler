@@ -4,6 +4,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import rangiffler.model.FriendJson;
 import rangiffler.model.UserJson;
 
 import static io.restassured.RestAssured.given;
@@ -30,6 +31,44 @@ public class RangifflerUserDataClient {
         return given()
                 .spec(requestSpec())
                 .get("/users")
+                .then();
+    }
+
+    public ValidatableResponse getFriends() {
+        return given()
+                .spec(requestSpec())
+                .get("/friends")
+                .then();
+    }
+
+    public ValidatableResponse getInvitations() {
+        return given()
+                .spec(requestSpec())
+                .get("/invitations")
+                .then();
+    }
+
+    public ValidatableResponse postFriendSubmit(FriendJson body) {
+        return given()
+                .spec(requestSpec())
+                .body(body)
+                .post("/friends/submit")
+                .then();
+    }
+
+    public ValidatableResponse postFriendInvitation(FriendJson body) {
+        return given()
+                .spec(requestSpec())
+                .body(body)
+                .post("/users/invite")
+                .then();
+    }
+
+    public ValidatableResponse postFriendRemove(FriendJson body) {
+        return given()
+                .spec(requestSpec())
+                .body(body)
+                .post("/friends/remove")
                 .then();
     }
 
