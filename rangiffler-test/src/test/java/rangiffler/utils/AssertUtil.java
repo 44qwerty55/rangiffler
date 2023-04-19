@@ -20,7 +20,7 @@ public class AssertUtil {
         String actualNode = objectMapper.valueToTree(actual).toPrettyString();
         if (!JsonPatchMatcher.jsonEquals(expectedNode)
                 .whenIgnoringPaths(ignorable).when(Option.IGNORING_ARRAY_ORDER).matches(actualNode)) {
-            throw new AssertionFailedError("errore", expectedNode, actualNode);
+            throw new AssertionFailedError("Ожидаемый ответ не совпадает с фактическим expected " + expectedNode + " actual " + actualNode);
         }
     }
 

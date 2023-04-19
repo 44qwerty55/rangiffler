@@ -1,6 +1,7 @@
 package rangiffler.jupiter.extension;
 
 import com.codeborne.selenide.Configuration;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -20,7 +21,8 @@ public class BeforeSuiteExtension implements AroundAllTestsExtension {
     @Override
     public void beforeAllTests(ExtensionContext context) {
         RestAssured.config = RestAssured.config().decoderConfig(decoderConfig().defaultContentCharset(StandardCharsets.UTF_8));
-        RestAssured.filters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()));
+        RestAssured.filters(
+                List.of(new AllureRestAssured(), new RequestLoggingFilter(), new ResponseLoggingFilter()));
         Awaitility.setDefaultPollDelay(1, TimeUnit.SECONDS);
         Awaitility.setDefaultPollInterval(5, TimeUnit.SECONDS);
         Awaitility.setDefaultTimeout(60, TimeUnit.SECONDS);
