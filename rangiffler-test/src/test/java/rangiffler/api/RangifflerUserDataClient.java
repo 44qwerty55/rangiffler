@@ -27,23 +27,26 @@ public class RangifflerUserDataClient {
                 .then();
     }
 
-    public ValidatableResponse getAllUsers() {
+    public ValidatableResponse getAllUsers(String username) {
         return given()
                 .spec(requestSpec())
+                .queryParams("username", username)
                 .get("/users")
                 .then();
     }
 
-    public ValidatableResponse getFriends() {
+    public ValidatableResponse getFriends(String username) {
         return given()
                 .spec(requestSpec())
+                .queryParams("username", username)
                 .get("/friends")
                 .then();
     }
 
-    public ValidatableResponse getInvitations() {
+    public ValidatableResponse getInvitations(String username) {
         return given()
                 .spec(requestSpec())
+                .queryParams("username", username)
                 .get("/invitations")
                 .then();
     }
