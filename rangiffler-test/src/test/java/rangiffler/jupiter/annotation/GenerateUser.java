@@ -20,4 +20,8 @@ public @interface GenerateUser {
 
     String password() default "";
 
+    GeneratePhoto[] photos() default {};
+
+    GenerateFriend[] friend() default {};
+
 }

@@ -47,13 +47,8 @@ public class RangifflerPhotoService {
 
     public @Nonnull
     PhotoJson addPhoto(@Nonnull PhotoJson photo) {
-        String code = photo.getCountryJson().getCode();
-        PhotoEntity photoEntity = photoRepository.findByUsernameAndCode(photo.getUsername(), code);
-        if (photoEntity == null) {
-            photoEntity = PhotoEntity.fromJson(photo);
-            return PhotoJson.fromEntity(photoRepository.save(photoEntity));
-        }
-        return PhotoJson.fromEntity(photoEntity);
+        PhotoEntity  photoEntity = PhotoEntity.fromJson(photo);
+        return PhotoJson.fromEntity(photoRepository.save(photoEntity));
     }
 
     public @Nonnull

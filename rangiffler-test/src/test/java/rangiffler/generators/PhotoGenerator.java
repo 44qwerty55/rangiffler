@@ -22,7 +22,7 @@ public class PhotoGenerator {
         byte[] photo = getPhotoAsBase64StringFromClasspath();
         photoJson.setUsername("username".concat(random(10000, 99999).toString()))
                 .setDescription("Description".concat(random(10000, 99999).toString()))
-                .setPhoto(photo != null && photo.length > 0 ? new String(photo, StandardCharsets.UTF_8) : null)
+                .setPhoto(photo != null && photo.length > 0 ? "data:image/jpeg;base64,".concat(new String(photo, StandardCharsets.UTF_8)) : null)
                 .setCountryJson(CountriesJson.fromEntity(countriesDao.getCountryByCode(country.getCode())));
         return photoJson;
     }
