@@ -24,6 +24,10 @@ public class UserJson {
     private String password;
     @JsonIgnore
     private boolean isAvailable;
+    @JsonIgnore
+    private UserJson userFriend;
+    @JsonIgnore
+    private PhotoJson userPhoto;
 
     public UserJson() {
     }

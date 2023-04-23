@@ -5,17 +5,21 @@ import io.qameta.allure.AllureId;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.extension.*;
 import rangiffler.api.RangifflerAuthClient;
+import rangiffler.api.RangifflerPhotoClient;
 import rangiffler.api.RangifflerUserDataClient;
 import rangiffler.config.Config;
-import rangiffler.jupiter.annotation.ApiLogin;
-import rangiffler.jupiter.annotation.GenerateUser;
-import rangiffler.jupiter.annotation.User;
+import rangiffler.data.dao.PostgresJdbcUserAuthDAO;
+import rangiffler.data.dao.UserAuthDao;
+import rangiffler.generators.PhotoGenerator;
+import rangiffler.helpers.FriendsHelper;
+import rangiffler.jupiter.annotation.*;
+import rangiffler.model.Country;
+import rangiffler.model.FriendStatus;
+import rangiffler.model.PhotoJson;
 import rangiffler.model.UserJson;
 import retrofit2.Response;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static rangiffler.utils.DataUtils.generateRandomPassword;
 import static rangiffler.utils.DataUtils.generateRandomUsername;
@@ -24,6 +28,7 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
 
     private final RangifflerAuthClient authClient = new RangifflerAuthClient();
     private final RangifflerUserDataClient rangifflerUserDataClient = new RangifflerUserDataClient();
+    private final UserAuthDao userAuthDao = new PostgresJdbcUserAuthDAO();
     protected static final Config CFG = Config.getConfig();
 
     public static final ExtensionContext.Namespace
@@ -41,9 +46,38 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
                 username = generateRandomUsername();
             }
             if ("".equals(password)) {
-                password = generateRandomPassword();
+                password = "1234";
             }
+
             UserJson userJson = apiRegister(username, password);
+
+            GeneratePhoto[] photos = entry.getValue().photos();
+            if (photos != null && photos.length > 0) {
+               PhotoJson photo = new RangifflerPhotoClient()
+                        .postAddPhoto(new PhotoGenerator().createDefaultPhoto(Country.FIJI).setUsername(username))
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_OK).extract().as(PhotoJson.class);
+                userJson.setUserPhoto(photo);
+            }
+
+            GenerateFriend[] friends = entry.getValue().friend();
+            if (friends != null && friends.length > 0) {
+
+                UserJson friend = new RangifflerUserDataClient()
+                        .getCurrentUserOrCreate(generateRandomUsername())
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_OK).extract().as(UserJson.class);
+
+                new FriendsHelper().inviteFriends(userJson, friend, FriendStatus.INVITATION_SENT);
+                new FriendsHelper().submitFriends(friend, userJson, FriendStatus.FRIEND);
+
+                new RangifflerPhotoClient()
+                        .postAddPhoto(new PhotoGenerator().createDefaultPhoto(Country.FIJI).setUsername(friend.getUsername()))
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_OK).extract().as(PhotoJson.class);
+                userJson.setUserFriend(friend);
+            }
+
             context.getStore(entry.getKey().getNamespace()).put(testId, userJson);
         }
     }
@@ -99,10 +133,12 @@ public class CreateUserExtension implements BeforeEachCallback, ParameterResolve
     }
 
     private UserJson apiRegister(String username, String password) throws Exception {
-        authClient.authorize();
-        Response<Void> res = authClient.register(username, password);
-        if (res.code() != 201) {
-            throw new RuntimeException("User is not registered");
+        if (userAuthDao.getUser(username) == null) {
+            authClient.authorize();
+            Response<Void> res = authClient.register(username, password);
+            if (res.code() != 201) {
+                throw new RuntimeException("User is not registered");
+            }
         }
         UserJson currentUser = rangifflerUserDataClient.getCurrentUserOrCreate(username).assertThat()
                 .statusCode(HttpStatus.SC_OK).extract().as(UserJson.class);

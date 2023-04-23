@@ -166,6 +166,11 @@ public class UserDataTest extends BaseTest {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK).extract().body().jsonPath().getList(".", UserJson.class);
 
+        Assertions.assertFalse(response
+                .stream()
+                .anyMatch(us -> us.getUsername().equals(user.getUsername()))
+        );
+
         List<UserJson> actual = response.stream()
                 .filter(us -> us.getUsername().equals(friend.getUsername()) || us.getUsername().equals(notFriend.getUsername()))
                 .collect(Collectors.toList());
@@ -180,8 +185,8 @@ public class UserDataTest extends BaseTest {
     @AllureId("207")
     @DisplayName("/friends Получение списка друзей")
     void getFriendUser(@UserData(username = "myUser2007") UserJson user,
-                    @UserData(username = "friend2007") UserJson friend,
-                    @UserData(username = "notFriend2007") UserJson notFriend) {
+                       @UserData(username = "friend2007") UserJson friend,
+                       @UserData(username = "notFriend2007") UserJson notFriend) {
 
         friendsHelper.inviteFriends(user, friend, FriendStatus.INVITATION_SENT);
         friendsHelper.submitFriends(friend, user, FriendStatus.FRIEND);
@@ -200,8 +205,8 @@ public class UserDataTest extends BaseTest {
     @AllureId("208")
     @DisplayName("/invitations Получение приглашений")
     void getInvitationsUser(@UserData(username = "myUser208") UserJson user,
-                       @UserData(username = "friend208") UserJson friend,
-                       @UserData(username = "notFriend208") UserJson notFriend) {
+                            @UserData(username = "friend208") UserJson friend,
+                            @UserData(username = "notFriend208") UserJson notFriend) {
 
         friendsHelper.inviteFriends(user, friend, FriendStatus.INVITATION_SENT);
 
