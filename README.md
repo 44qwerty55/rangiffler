@@ -1,5 +1,65 @@
 # Rangiffler
 
+Итак Rangiffler в каком-то виде существует  :) 
+
+СТУКТУРА
+
+1) Rangiffler использует БД Postrgress перед запуском необходимо создать следующие БД в контейнере:
+localhost:5432/rangiffler-auth
+localhost:5432/rangiffler-photo
+localhost:5432/rangiffler-geo
+localhost:5432/rangiffler-userdata
+креды: 
+    username: postgres
+    password: secret
+
+2) Rangiffler включает в себя следующиу модули
+rangiffler-auth - модуль авторизации   base-uri: 'http://127.0.0.1:9000'
+rangiffler-client(rangiffler-front) - веб часть   base-uri: 'http://127.0.0.1:3001'
+rangiffler-gateway - бэк  base-uri: 'http://127.0.0.1:8080'
+rangiffler-geo - микросервис для поиска стран   base-uri: 'http://127.0.0.1:8091'
+rangiffler-userdata - микросервис для хранения данных по пользователям   base-uri: 'http://127.0.0.1:8092'
+rangiffler-photo - микросервис для хранения данныъ по фото   base-uri: 'http://127.0.0.1:8093'
+rangiffler-test - модуль с UI и API автотестами 
+
+3) обмен данными между микросервисами осуществляеться через REST
+
+УСТАНОВКА 
+
+!!! запуск осуществляеться только локально, для запуска необходимо прописать в IDEA-run-editconfiguration
+параметр -Dspring.profiles.active=local 
+Java version - 17 
+
+1) запустить сервис rangiffler-auth (RangifflerAuthApplication)
+2) запустить сервисы:
+rangiffler-gateway (RangifflerGatewayApp)
+rangiffler-geo (RangifflerGeoApplication)
+rangiffler-userdata (RangifflerUserdataApplication)
+rangiffler-photo (RangifflerPhotoApplication)
+3) запустить фронт 
+```posh
+cd C:\rangiffler\rangiffler\rangiffler-client
+npm i
+npm start
+```
+
+ТЕСТЫ
+
+API тесты  rangiffler-test/src/test/java/rangiffler/test/rest
+rangiffler/test/rest/CountriesTest.java - тесты проверяющие API сервиса rangiffler-geo
+rangiffler/test/rest/PhotoTest.java - тесты проверяющие API сервиса rangiffler-photo
+rangiffler/test/rest/UserDataTest.java - тесты проверяющие API сервиса rangiffler-userdata
+UI тесты 
+rangiffler/test/web/LoginUsersTest.java - тесты проверяют авторизацию 
+rangiffler/test/web/WebTest.java - тесты проверяют действия с веб интерфейсом 
+
+
+
+
+
+
+
+****************************************************************************
 Приветствую тебя, мой дорогой друг!
 Если ты это читаешь - то ты собираешься сделать первый шаг в написании диплома QA.GURU Advanced.
 Далее я опишу основные направения работы, но помни, что этот диплом - не шаблонная работа, а место
